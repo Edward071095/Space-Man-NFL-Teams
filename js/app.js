@@ -11,17 +11,13 @@ let word;
 let correct;
 let goodChoice;
 let wrongSelection;
-let spaceman
 let min = 0;
 let max = 31;
 
 /*----- Cached Element References  -----*/
-const inputs = document.querySelector(".inputs")
-const hintBox = document.querySelector("hint span")
-const wrongLetter = document.querySelector(".wrong-letter span")
-const lettersTyped = document.querySelector(".typing-input")
-const submitBttn = document.querySelector("#submit")
-const restartBttn = document.querySelector("#restart")
+
+
+
 
 
 
@@ -53,7 +49,50 @@ if (randomWord.toLowerCase().includes(letter.toLowerCase())) {
 }
 
 const letter =''
-console.log(correctLetter('e'));
+console.log(correctLetter('a'));
+
+const str = wordSelection[randomNumber]
+const found = wordSelection[randomNumber].match
+
+
+function submit() {
+    alert("Letter Submitted!");
+}
+
+function restart() {
+    alert("Game Restarted");
+}
+
+let newWordArray = [];
+let teamName = wordSelection[randomNumber]
+
+function initArray(ary, teamName) {
+    let strLength = teamName.length;
+    console.log("The team name has " + strLength + " characters");
+    for (let i = 0; i < strLength; i++) {
+        ary[i] = "*";
+    }
+    return ary;
+}
+
+newWordArray = initArray(newWordArray, teamName);
+
+let guess;
+let team;
+let regex;
+let matches;
+
+guess = "e";
+regex = new RegExp(guess, 'gi');  // 'g' global, 'i' case insensitive
+matches = teamName.matchAll(regex);
+for (const match of matches) {
+    console.log(`Found "${match[0]}" at index ${match.index}`);
+    newWordArray[match.index] = guess;
+}
+
+team = newWordArray + "";  // turn the array into a string
+team = team.replaceAll(",",""); // get rid of commas
+console.log("Current guess: " + team + "\n");
 
 
 
