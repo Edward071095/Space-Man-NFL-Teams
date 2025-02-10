@@ -10,14 +10,20 @@ const wordSelection = [
 let word;
 let correct;
 let goodChoice;
-let wrongSelection;
+let wrongLetters = [];
 let min = 0;
 let max = 31;
+let guessedLetter
 
 /*----- Cached Element References  -----*/
+//const inputs = document.querySelector(".inputs")
+const hintBox = document.querySelector(".hint")
+const wrongLetterEl = document.querySelector(".wrong-letter")
+//const lettersTyped = document.querySelector(".typing-input")
+//const submitBttn = document.querySelector("#submit")
+//const restartBttn = document.querySelector("#restart")
 
-
-
+const guessBox = document.querySelector("#guess-input")
 
 
 
@@ -33,7 +39,7 @@ function getRandomInt(min, max) {
   let randomNumber = getRandomInt(0, 31);
   //console.log(randomNumber); // Outputs a random integer between 0 and 31
   console.log(wordSelection[randomNumber]); // outputs a random word
-  console.log(wordSelection[randomNumber].length) //outputs the amount of letters in random word 
+  hintBox.innerText = wordSelection[randomNumber].length //outputs the amount of letters in random word 
 
 // This funtion returns true or false if the letter typed is in the current word
 function correctLetter(letter) {
@@ -44,19 +50,28 @@ if (randomWord.toLowerCase().includes(letter.toLowerCase())) {
     return true;
 } else {
     console.log(`letter '${letter}' is NOT in the word '${randomWord}'`);
+    wrongLetters.push(letter)
+    console.log(wrongLetters)
+    for (let i = 0; i < wrongLetters.length; i++) {
+        console.log(wrongLetters[i]);
+      }
     return false;
 }
 }
-
-const letter =''
-console.log(correctLetter('a'));
 
 const str = wordSelection[randomNumber]
 const found = wordSelection[randomNumber].match
 
 
 function submit() {
-    alert("Letter Submitted!");
+   guessedLetter = guessBox.value
+   correctLetter(guessedLetter)
+   guessBox.value = ''
+   printWrongLetters()
+}
+
+function printWrongLetters() {
+  wrongLetterEl.innerText = wrongLetters.join(", ")
 }
 
 function restart() {
@@ -82,7 +97,7 @@ let team;
 let regex;
 let matches;
 
-guess = "e";
+guess = "o";
 regex = new RegExp(guess, 'gi');  // 'g' global, 'i' case insensitive
 matches = teamName.matchAll(regex);
 for (const match of matches) {

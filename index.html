@@ -11,12 +11,17 @@
    <header>
    <h1>Space Man NFL Teams</h1> 
    </header>
-    <input type="text" id="guess-input" maxlength="1" placeholder="Guess A Letter">
+   <input type="text" class="spaceman-box">
     <div class="inputs"></div>
-    <p class="hint">Hint:</p>
-    <p class="wrong-letter">Wrong letters: </p>
+    <p>Hint:
+        <p class="hint"></p>
+    </p>
+    <p>Wrong letters: 
+        <p class="wrong-letter"></p>
+    </p>
     <p id="feedback"></p>
-    <input type="text" class="spaceman-box">
+    
+    <input type="text" id="guess-input" maxlength="1" placeholder="Guess A Letter">
 <main>
     <button onclick="submit()">SUBMIT</button>
     <button onclick="restart">Restart</button> 
