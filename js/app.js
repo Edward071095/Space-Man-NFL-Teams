@@ -14,6 +14,7 @@ let wrongLetters = [];
 let min = 0;
 let max = 31;
 let guessedLetter
+let randomNumber
 const spaceMan = 'Spaceman'
 /*----- Cached Element References  -----*/
 //const inputs = document.querySelector(".inputs")
@@ -35,12 +36,13 @@ function getRandomInt(min, max) {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
-  
-  let randomNumber = getRandomInt(0, 31);
+function getWord(){
+   randomNumber = getRandomInt(0, 31);
   //console.log(randomNumber); // Outputs a random integer between 0 and 31
   console.log(wordSelection[randomNumber]); // outputs a random word
   hintBox.innerText = wordSelection[randomNumber].length //outputs the amount of letters in random word 
-
+}
+getWord()
 // This funtion returns true or false if the letter typed is in the current word
 function correctLetter(letter) {
     const randomWord = wordSelection[randomNumber]
@@ -76,7 +78,10 @@ function printWrongLetters() {
 }
 
 function restart() {
-    alert("Game Restarted");
+    wrongLetters = []
+    spaceManBoxEl.value = ''
+    wrongLetterEl.innerText = ''
+    getWord()
 }
 
 let newWordArray = [];
