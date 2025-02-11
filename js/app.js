@@ -14,7 +14,7 @@ let wrongLetters = [];
 let min = 0;
 let max = 31;
 let guessedLetter
-
+const spaceMan = 'Spaceman'
 /*----- Cached Element References  -----*/
 //const inputs = document.querySelector(".inputs")
 const hintBox = document.querySelector(".hint")
@@ -24,7 +24,7 @@ const wrongLetterEl = document.querySelector(".wrong-letter")
 //const restartBttn = document.querySelector("#restart")
 
 const guessBox = document.querySelector("#guess-input")
-
+const spaceManBoxEl = document.querySelector(".spaceman-box")
 
 
 /*-------------- Functions -------------*/
@@ -51,6 +51,7 @@ if (randomWord.toLowerCase().includes(letter.toLowerCase())) {
 } else {
     console.log(`letter '${letter}' is NOT in the word '${randomWord}'`);
     wrongLetters.push(letter)
+    spaceManBoxEl.value = spaceMan.slice(0, wrongLetters.length)
     console.log(wrongLetters)
     for (let i = 0; i < wrongLetters.length; i++) {
         console.log(wrongLetters[i]);
@@ -108,6 +109,7 @@ for (const match of matches) {
 team = newWordArray + "";  // turn the array into a string
 team = team.replaceAll(",",""); // get rid of commas
 console.log("Current guess: " + team + "\n");
+
 
 
 
