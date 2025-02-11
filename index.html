@@ -14,18 +14,21 @@
    <input type="text" class="spaceman-box">
     <div class="inputs"></div>
     <p>Hint:
-        <p class="hint"></p>
+        <div class="hint-containers"></div>
     </p>
     <p>Wrong letters: 
         <p class="wrong-letter"></p>
     </p>
     <p id="feedback"></p>
     
-    <input type="text" id="guess-input" maxlength="1" placeholder="Guess A Letter">
+    <input type="text" id="guess-input" placeholder="Guess A Letter">
 <main>
     <button onclick="submit()">SUBMIT</button>
     <button onclick="restart()">Restart</button> 
 </main>
+<footer>
+    <p class="invalid-submission"></p>
+</footer>
 </body>
 
 </html>

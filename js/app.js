@@ -1,7 +1,7 @@
 /*-------------- Constants -------------*/
 const wordSelection = [
     'Bears', 'Bengals', 'Bills', 'Broncos', 'Browns', 'Bucaneers', 'Cardinals', 'Chargers',
-    'Cheifs', 'Colts', 'Commanders', 'Cowboys', 'Dolphins', 'Eagles', 'Falcons', 'Forty Niners',
+    'Cheifs', 'Colts', 'Commanders', 'Cowboys', 'Dolphins', 'Eagles', 'Falcons', '49ers',
     'Giants', 'Jaguars', 'Jets', 'Lions', 'Packers', 'Panthers', 'Patriots', 'Raiders',
     'Rams', 'Ravens', 'Saints', 'Seahawks', 'Steelers', 'Texans', 'Titans', "Vikings",
 ]
@@ -15,10 +15,11 @@ let min = 0;
 let max = 31;
 let guessedLetter
 let randomNumber
+let randomWord = ''
 const spaceMan = 'Spaceman'
 /*----- Cached Element References  -----*/
 //const inputs = document.querySelector(".inputs")
-const hintBox = document.querySelector(".hint")
+const hintContainersEl = document.querySelector(".hint-containers")
 const wrongLetterEl = document.querySelector(".wrong-letter")
 //const lettersTyped = document.querySelector(".typing-input")
 //const submitBttn = document.querySelector("#submit")
@@ -26,6 +27,8 @@ const wrongLetterEl = document.querySelector(".wrong-letter")
 
 const guessBox = document.querySelector("#guess-input")
 const spaceManBoxEl = document.querySelector(".spaceman-box")
+const invalidSubmission = document.querySelector(".invalid-submission")
+
 
 
 /*-------------- Functions -------------*/
@@ -39,36 +42,46 @@ function getRandomInt(min, max) {
 function getWord(){
    randomNumber = getRandomInt(0, 31);
   //console.log(randomNumber); // Outputs a random integer between 0 and 31
-  console.log(wordSelection[randomNumber]); // outputs a random word
-  hintBox.innerText = wordSelection[randomNumber].length //outputs the amount of letters in random word 
+  randomWord = wordSelection[randomNumber]; // outputs a random word
+  const randomWordArray = randomWord.split('')
+  randomWordArray.forEach((el, idx) => {
+  const tempEl = document.createElement('div') 
+  tempEl.id = `box-${idx}`
+  hintContainersEl.appendChild(tempEl)
+  })
+  //hintContainersEl.innerText = wordSelection[randomNumber].length //outputs the amount of letters in random word 
 }
 getWord()
 // This funtion returns true or false if the letter typed is in the current word
-function correctLetter(letter) {
-    const randomWord = wordSelection[randomNumber]
-
-if (randomWord.toLowerCase().includes(letter.toLowerCase())) {
-    console.log(`Letter '${letter}' is in the word '${randomWord}'`);
-    return true;
-} else {
-    console.log(`letter '${letter}' is NOT in the word '${randomWord}'`);
-    wrongLetters.push(letter)
-    spaceManBoxEl.value = spaceMan.slice(0, wrongLetters.length)
-    console.log(wrongLetters)
-    for (let i = 0; i < wrongLetters.length; i++) {
-        console.log(wrongLetters[i]);
-      }
-    return false;
+function correctLetter(letter) { 
+if (letter.length === 1 || letter.length === randomWord.length) {
+    if (randomWord.toLowerCase().includes(letter.toLowerCase())) {
+        console.log(`Letter '${letter}' is in the word '${randomWord}'`);
+        return true;
+    } else {
+        console.log(`letter '${letter}' is NOT in the word '${randomWord}'`);
+        wrongLetters.push(letter)
+        spaceManBoxEl.value = spaceMan.slice(0, wrongLetters.length)
+        console.log(wrongLetters)
+        for (let i = 0; i < wrongLetters.length; i++) {
+            console.log(wrongLetters[i]);
+        }
+        return false;
+    }
+} else { 
+    invalidSubmission.innerText = 'Invalid Entry: Only 1 Letter or The Whole Word Is Allowed.' 
+    setTimeout(() => {
+        invalidSubmission.innerText = ''
+    }, 3000)
 }
 }
-
 const str = wordSelection[randomNumber]
 const found = wordSelection[randomNumber].match
 
 
 function submit() {
    guessedLetter = guessBox.value
-   correctLetter(guessedLetter)
+   correctLetter(guessedLetter.trim())
    guessBox.value = ''
    printWrongLetters()
 }
