@@ -19,7 +19,7 @@ let randomWord = ''
 const spaceMan = 'Spaceman'
 /*----- Cached Element References  -----*/
 //const inputs = document.querySelector(".inputs")
-const hintContainersEl = document.querySelector(".hint-containers")
+let hintContainersEl = document.querySelector(".hint-containers")
 const wrongLetterEl = document.querySelector(".wrong-letter")
 //const lettersTyped = document.querySelector(".typing-input")
 //const submitBttn = document.querySelector("#submit")
@@ -43,11 +43,25 @@ function getWord(){
    randomNumber = getRandomInt(0, 31);
   //console.log(randomNumber); // Outputs a random integer between 0 and 31
   randomWord = wordSelection[randomNumber]; // outputs a random word
+  createBoxes()
+}
+function createBoxes(team){
+    let displayAll = team === randomWord
+    let hintsEl = null
+    if (team?.length === 1) {
+        hintContainersEl.remove()
+        hintContainersEl = document.createElement('div')
+        hintContainersEl.classList.add("hint-containers")
+        hintsEl = document.querySelector(".hints")
+    }
   const randomWordArray = randomWord.split('')
   randomWordArray.forEach((el, idx) => {
   const tempEl = document.createElement('div') 
+  tempEl.textContent = (displayAll || team === el) ? el : ''
+
   tempEl.id = `box-${idx}`
   hintContainersEl.appendChild(tempEl)
+  if (hintsEl) hintsEl.appendChild(hintContainersEl)
   })
   //hintContainersEl.innerText = wordSelection[randomNumber].length //outputs the amount of letters in random word 
 }
@@ -56,6 +70,7 @@ getWord()
 function correctLetter(letter) { 
 if (letter.length === 1 || letter.length === randomWord.length) {
     if (randomWord.toLowerCase().includes(letter.toLowerCase())) {
+        createBoxes(letter)
         console.log(`Letter '${letter}' is in the word '${randomWord}'`);
         return true;
     } else {
