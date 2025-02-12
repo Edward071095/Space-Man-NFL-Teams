@@ -1,14 +1,14 @@
 /*-------------- Constants -------------*/
 const wordSelection = [
-    'Bears', 'Bengals', 'Bills', 'Broncos', 'Browns', 'Bucaneers', 'Cardinals', 'Chargers',
-    'Cheifs', 'Colts', 'Commanders', 'Cowboys', 'Dolphins', 'Eagles', 'Falcons', '49ers',
-    'Giants', 'Jaguars', 'Jets', 'Lions', 'Packers', 'Panthers', 'Patriots', 'Raiders',
-    'Rams', 'Ravens', 'Saints', 'Seahawks', 'Steelers', 'Texans', 'Titans', "Vikings",
+    'bears', 'bengals', 'bills', 'broncos', 'browns', 'bucaneers', 'cardinals', 'chargers',
+    'cheifs', 'colts', 'commanders', 'cowboys', 'dolphins', 'eagles', 'falcons', '49ers',
+    'giants', 'jaguars', 'jets', 'lions', 'packers', 'panthers', 'patriots', 'raiders',
+    'rams', 'ravens', 'saints', 'seahawks', 'steelers', 'texans', 'titans', "vikings",
 ]
 
 /*---------- Variables (state) ---------*/
 let word;
-let correct;
+let randomWordArray; 
 let goodChoice;
 let wrongLetters = [];
 let min = 0;
@@ -19,7 +19,7 @@ let randomWord = ''
 const spaceMan = 'Spaceman'
 /*----- Cached Element References  -----*/
 //const inputs = document.querySelector(".inputs")
-let hintContainersEl = document.querySelector(".hint-containers")
+const hintContainersEl = document.querySelector(".hint-containers")
 const wrongLetterEl = document.querySelector(".wrong-letter")
 //const lettersTyped = document.querySelector(".typing-input")
 //const submitBttn = document.querySelector("#submit")
@@ -45,32 +45,47 @@ function getWord(){
   randomWord = wordSelection[randomNumber]; // outputs a random word
   createBoxes()
 }
-function createBoxes(team){
-    let displayAll = team === randomWord
-    let hintsEl = null
-    if (team?.length === 1) {
-        hintContainersEl.remove()
-        hintContainersEl = document.createElement('div')
-        hintContainersEl.classList.add("hint-containers")
-        hintsEl = document.querySelector(".hints")
-    }
-  const randomWordArray = randomWord.split('')
-  randomWordArray.forEach((el, idx) => {
-  const tempEl = document.createElement('div') 
-  tempEl.textContent = (displayAll || team === el) ? el : ''
 
-  tempEl.id = `box-${idx}`
-  hintContainersEl.appendChild(tempEl)
-  if (hintsEl) hintsEl.appendChild(hintContainersEl)
-  })
-  //hintContainersEl.innerText = wordSelection[randomNumber].length //outputs the amount of letters in random word 
+let rightLetter = [];
+
+function createBoxes(team){
+    randomWordArray = randomWord.split('')
+    randomWordArray.forEach((el, idx) => {
+        const tempEl = document.createElement('div') 
+        //tempEl.textContent = (displayAll || team === el) ? el : ''
+        if (rightLetter.includes(el)) {
+            tempEl.textContent = el; 
+        } else {
+            tempEl.textContent = '';
+        }
+        tempEl.id = `box-${idx}`
+
+        hintContainersEl.appendChild(tempEl)
+        
+    })
+  
+}
+function guessLetter(guess) {
+    // Ensure the guessed letter is part of the random word and isn't already guessed
+    if (randomWord.includes(guess) && !rightLetter.includes(guess)) {
+        rightLetter.push(guess); // Add the guess to the list of correct guesses
+        createBoxes(); // Re-render the boxes with the updated guesses
+    }
 }
 getWord()
 // This funtion returns true or false if the letter typed is in the current word
 function correctLetter(letter) { 
-if (letter.length === 1 || letter.length === randomWord.length) {
+if (letter.length === 1 ) {
     if (randomWord.toLowerCase().includes(letter.toLowerCase())) {
-        createBoxes(letter)
+     const indicesArray = grabIndices(guessedLetter);
+
+        indicesArray.map(index => {
+            const boxClass = `.box-${index}`;
+            const currentBoxEl = hintContainersEl.querySelector(boxClass);
+            if (currentBoxEl) {
+                currentBoxEl.textContent = guessedLetter;
+            }
+        });
         console.log(`Letter '${letter}' is in the word '${randomWord}'`);
         return true;
     } else {
@@ -83,6 +98,7 @@ if (letter.length === 1 || letter.length === randomWord.length) {
         }
         return false;
     }
+} else if (letter.length === randomWord.length)  {
 } else { 
     invalidSubmission.innerText = 'Invalid Entry: Only 1 Letter or The Whole Word Is Allowed.' 
     setTimeout(() => {
@@ -92,6 +108,29 @@ if (letter.length === 1 || letter.length === randomWord.length) {
 }
 const str = wordSelection[randomNumber]
 const found = wordSelection[randomNumber].match
+
+// function guessedLetter() {
+//     const guess = guessBox.value.toLowerCase();
+//     if (wordSelection.includes(guess) && !rightLetter.includes(guess)) {
+//         rightLetter.push(guess);
+//     }
+//     correctLetter();
+//     guessBox.value = '';
+// }
+// correctLetter()
+
+
+function grabIndices(letter) {
+    const indices = randomWordArray.map((char, index) => {
+        if (char === letter) {
+            return index;
+        } else {
+            return -1;
+        }
+    }).filter(index => index !== -1);
+    return indices;
+}
+
 
 
 function submit() {
@@ -148,4 +187,3 @@ console.log("Current guess: " + team + "\n");
 
 
 /*----------- Event Listeners ----------*/
-
