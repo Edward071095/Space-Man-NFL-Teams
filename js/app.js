@@ -19,12 +19,12 @@ let randomWord = ''
 const spaceMan = 'Spaceman'
 /*----- Cached Element References  -----*/
 //const inputs = document.querySelector(".inputs")
-const hintContainersEl = document.querySelector(".hint-containers")
+let hintContainersEl = document.querySelector(".hint-containers")
 const wrongLetterEl = document.querySelector(".wrong-letter")
 //const lettersTyped = document.querySelector(".typing-input")
 //const submitBttn = document.querySelector("#submit")
 //const restartBttn = document.querySelector("#restart")
-
+const hintsEl = document.querySelector(".hints")
 const guessBox = document.querySelector("#guess-input")
 const spaceManBoxEl = document.querySelector(".spaceman-box")
 const invalidSubmission = document.querySelector(".invalid-submission")
@@ -48,7 +48,7 @@ function getWord(){
 
 let rightLetter = [];
 
-function createBoxes(team){
+function createBoxes(){
     randomWordArray = randomWord.split('')
     randomWordArray.forEach((el, idx) => {
         const tempEl = document.createElement('div') 
@@ -69,7 +69,7 @@ function guessLetter(guess) {
     // Ensure the guessed letter is part of the random word and isn't already guessed
     if (randomWord.includes(guess) && !rightLetter.includes(guess)) {
         rightLetter.push(guess); // Add the guess to the list of correct guesses
-        createBoxes(); // Re-render the boxes with the updated guesses
+        
     }
 }
 getWord()
@@ -77,13 +77,14 @@ getWord()
 function correctLetter(letter) { 
 if (letter.length === 1 ) {
     if (randomWord.toLowerCase().includes(letter.toLowerCase())) {
-     const indicesArray = grabIndices(guessedLetter);
+     const indicesArray = grabIndices(letter);
 
         indicesArray.map(index => {
-            const boxClass = `.box-${index}`;
+            //debugger
+            const boxClass = `#box-${index}`;
             const currentBoxEl = hintContainersEl.querySelector(boxClass);
             if (currentBoxEl) {
-                currentBoxEl.textContent = guessedLetter;
+                currentBoxEl.textContent = letter;
             }
         });
         console.log(`Letter '${letter}' is in the word '${randomWord}'`);
@@ -144,7 +145,15 @@ function printWrongLetters() {
   wrongLetterEl.innerText = wrongLetters.join(", ")
 }
 
+function clearBoxes() {
+    hintContainersEl.remove()
+    hintContainersEl = document.createElement("div")
+    hintContainersEl.classList.add('hint-containers')
+    hintsEl.appendChild(hintContainersEl)
+}
+
 function restart() {
+    clearBoxes()
     wrongLetters = []
     spaceManBoxEl.value = ''
     wrongLetterEl.innerText = ''
