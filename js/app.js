@@ -100,7 +100,8 @@ function showMessage(message, time) {
         invalidSubmission.innerText = ''
     }, time)
 }
-function updateSpaceman() {
+function updateSpaceman(letter) {
+    if (letter) wrongLetters.push(letter)
     spaceManBoxEl.value = spaceMan.slice(0, (wrongLetters.length + lossTurnNum))
 
 }
@@ -111,8 +112,8 @@ function correctLetter(letter) {
             const indicesArray = grabIndices(letter);
             showLetters(indicesArray, letter)
         } else {
-            wrongLetters.push(letter)
-            updateSpaceman()
+           
+            updateSpaceman(letter)
         }
         threeStrikes = 0
     } else if (letter.length === randomWord.length)  {
@@ -120,6 +121,8 @@ function correctLetter(letter) {
             showLetters(randomWordArray, letter, true)
             showMessage(messages.winMessage.text, messages.winMessage.time)
             toggleSubmit(true)
+        } else {
+            updateSpaceman(letter)
         }
         threeStrikes = 0
     } else { 
