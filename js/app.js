@@ -27,12 +27,9 @@ let randomWord = ''
 let threeStrikes = 0
 let lossTurnNum = 0
 /*----- Cached Element References  -----*/
-//const inputs = document.querySelector(".inputs")
 let hintContainersEl = document.querySelector(".hint-containers")
 const wrongLetterEl = document.querySelector(".wrong-letter")
-//const lettersTyped = document.querySelector(".typing-input")
 const submitBttn = document.querySelector("#submit-button")
-//const restartBttn = document.querySelector("#restart")
 const hintsEl = document.querySelector(".hints")
 const guessBox = document.querySelector("#guess-input")
 const spaceManBoxEl = document.querySelector(".spaceman-box")
@@ -143,16 +140,6 @@ function correctLetter(letter) {
 }
 const str = wordSelection[randomNumber]
 const found = wordSelection[randomNumber].match
-
-// function guessedLetter() {
-//     const guess = guessBox.value.toLowerCase();
-//     if (wordSelection.includes(guess) && !rightLetter.includes(guess)) {
-//         rightLetter.push(guess);
-//     }
-//     correctLetter();
-//     guessBox.value = '';
-// }
-// correctLetter()
 
 
 function grabIndices(letter) {

@@ -1,5 +1,7 @@
 body {
-    background-color: lightskyblue;
+    background-image: url("https://motionarray.imgix.net/2173488-o54M5ShxNC-high_0000.jpg?w=660&q=60&fit=max&auto=format");
+    background-size: cover;
+    /* background-color: lightskyblue; */
     padding: 0;
     margin: 0;
     align-items: center;
@@ -11,6 +13,11 @@ header {
     text-align: center;
     background-color: coral;
     border-radius: 10px;
+}
+
+main {
+    background-color: rgba(0, 0, 0, 0.49);
+    padding-top: 20px;
 }
 
 div.hint-containers {
@@ -27,5 +34,26 @@ div.hint-containers > div {
     height: 30px;
     width: 25px;
     background-color: white;
+    line-height: 30px;
+    font-size: 25px;
+}
 
+button {
+    margin: 15px 5px 20px 5px; 
+    background-color: blue;
+    color: white;
+    padding: 7px;
+}
+
+p, h2 {
+    color: white;
+}
+
+p {
+    font-size: 20px;
+    margin-top: 0px;
+}
+
+input {
+    font-size: 15px
 }
