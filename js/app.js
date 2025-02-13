@@ -5,6 +5,12 @@ const wordSelection = [
     'giants', 'jaguars', 'jets', 'lions', 'packers', 'panthers', 'patriots', 'raiders',
     'rams', 'ravens', 'saints', 'seahawks', 'steelers', 'texans', 'titans', "vikings",
 ]
+const spaceMan = 'Spaceman'
+const messages = {
+    errorMessage: {time: 3000, text: 'Invalid Entry: Only 1 Letter or The Whole Word Is Allowed.'}, 
+    winMessage:  {time: 10000, text: 'You Win! Tell A Friend!'},
+    lossMessage: {time: 10000, text: 'You Lose. Try Again.'}
+}
 
 /*---------- Variables (state) ---------*/
 let word;
@@ -16,7 +22,7 @@ let max = 31;
 let guessedLetter
 let randomNumber
 let randomWord = ''
-const spaceMan = 'Spaceman'
+
 /*----- Cached Element References  -----*/
 //const inputs = document.querySelector(".inputs")
 let hintContainersEl = document.querySelector(".hint-containers")
@@ -86,35 +92,39 @@ function showLetters(theArr, word, showAll = false) {
     });
 }
 
-// This funtion returns true or false if the letter typed is in the current word
-function correctLetter(letter) { 
-if (letter.length === 1 ) {
-    if (randomWord.toLowerCase().includes(letter.toLowerCase())) {
-        const indicesArray = grabIndices(letter);
-        showLetters(indicesArray, letter)
-        console.log(`Letter '${letter}' is in the word '${randomWord}'`);
-        return true;
-    } else {
-        console.log(`letter '${letter}' is NOT in the word '${randomWord}'`);
-        wrongLetters.push(letter)
-        spaceManBoxEl.value = spaceMan.slice(0, wrongLetters.length)
-        console.log(wrongLetters)
-        for (let i = 0; i < wrongLetters.length; i++) {
-            console.log(wrongLetters[i]);
-        }
-        return false;
-    }
-} else if (letter.length === randomWord.length)  {
-   if (letter === randomWord) {
-    showLetters(randomWordArray, letter, true)
-    console.log('You win! Tell a friend.')
-   }
-} else { 
-    invalidSubmission.innerText = 'Invalid Entry: Only 1 Letter or The Whole Word Is Allowed.' 
+function showMessage(message, time) {
+    invalidSubmission.innerText = message
     setTimeout(() => {
         invalidSubmission.innerText = ''
-    }, 3000)
+    }, time)
 }
+
+// This funtion returns true or false if the letter typed is in the current word
+function correctLetter(letter) { 
+    if (letter.length === 1 ) {
+        if (randomWord.toLowerCase().includes(letter.toLowerCase())) {
+            const indicesArray = grabIndices(letter);
+            showLetters(indicesArray, letter)
+            console.log(`Letter '${letter}' is in the word '${randomWord}'`);
+        } else {
+            console.log(`letter '${letter}' is NOT in the word '${randomWord}'`);
+            wrongLetters.push(letter)
+            spaceManBoxEl.value = spaceMan.slice(0, wrongLetters.length)
+            console.log(wrongLetters)
+            for (let i = 0; i < wrongLetters.length; i++) {
+                console.log(wrongLetters[i]);
+            }
+        }
+    } else if (letter.length === randomWord.length)  {
+    if (letter === randomWord) {
+        showLetters(randomWordArray, letter, true)
+        showMessage(messages.winMessage.text, messages.winMessage.time)
+    }
+    } else { 
+        showMessage(messages.errorMessage.text, messages.errorMessage.time)
+    }
+    
+    if (wrongLetters.length === spaceMan.length) showMessage(messages.lossMessage.text, messages.lossMessage.time)
 }
 const str = wordSelection[randomNumber]
 const found = wordSelection[randomNumber].match
