@@ -73,20 +73,25 @@ function guessLetter(guess) {
     }
 }
 getWord()
+
+function showLetters(theArr, word, showAll = false) {
+    
+    theArr.map((data, idx) => {
+        //debugger
+        const boxClass = `#box-${showAll ? idx : data}`;
+        const currentBoxEl = hintContainersEl.querySelector(boxClass);
+        if (currentBoxEl) {
+            currentBoxEl.textContent = showAll ? data : word;
+        }
+    });
+}
+
 // This funtion returns true or false if the letter typed is in the current word
 function correctLetter(letter) { 
 if (letter.length === 1 ) {
     if (randomWord.toLowerCase().includes(letter.toLowerCase())) {
-     const indicesArray = grabIndices(letter);
-
-        indicesArray.map(index => {
-            //debugger
-            const boxClass = `#box-${index}`;
-            const currentBoxEl = hintContainersEl.querySelector(boxClass);
-            if (currentBoxEl) {
-                currentBoxEl.textContent = letter;
-            }
-        });
+        const indicesArray = grabIndices(letter);
+        showLetters(indicesArray, letter)
         console.log(`Letter '${letter}' is in the word '${randomWord}'`);
         return true;
     } else {
@@ -100,6 +105,10 @@ if (letter.length === 1 ) {
         return false;
     }
 } else if (letter.length === randomWord.length)  {
+   if (letter === randomWord) {
+    showLetters(randomWordArray, letter, true)
+    console.log('You win! Tell a friend.')
+   }
 } else { 
     invalidSubmission.innerText = 'Invalid Entry: Only 1 Letter or The Whole Word Is Allowed.' 
     setTimeout(() => {
