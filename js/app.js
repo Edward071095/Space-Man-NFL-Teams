@@ -9,7 +9,9 @@ const spaceMan = 'Spaceman'
 const messages = {
     errorMessage: {time: 3000, text: 'Invalid Entry: Only 1 Letter or The Whole Word Is Allowed.'}, 
     winMessage:  {time: 10000, text: 'You Win! Tell A Friend!'},
-    lossMessage: {time: 10000, text: 'You Lose. Try Again.'}
+    lossMessage: {time: 10000, text: 'You Lose. Try Again.'},
+    threeStrikeMessage: {time: 5000, text: '3 Invalid Entries. You Lose A Turn.'}
+
 }
 
 /*---------- Variables (state) ---------*/
@@ -22,13 +24,14 @@ let max = 31;
 let guessedLetter
 let randomNumber
 let randomWord = ''
-
+let threeStrikes = 0
+let lossTurnNum = 0
 /*----- Cached Element References  -----*/
 //const inputs = document.querySelector(".inputs")
 let hintContainersEl = document.querySelector(".hint-containers")
 const wrongLetterEl = document.querySelector(".wrong-letter")
 //const lettersTyped = document.querySelector(".typing-input")
-//const submitBttn = document.querySelector("#submit")
+const submitBttn = document.querySelector("#submit-button")
 //const restartBttn = document.querySelector("#restart")
 const hintsEl = document.querySelector(".hints")
 const guessBox = document.querySelector("#guess-input")
@@ -47,7 +50,6 @@ function getRandomInt(min, max) {
   }
 function getWord(){
    randomNumber = getRandomInt(0, 31);
-  //console.log(randomNumber); // Outputs a random integer between 0 and 31
   randomWord = wordSelection[randomNumber]; // outputs a random word
   createBoxes()
 }
@@ -98,33 +100,43 @@ function showMessage(message, time) {
         invalidSubmission.innerText = ''
     }, time)
 }
+function updateSpaceman() {
+    spaceManBoxEl.value = spaceMan.slice(0, (wrongLetters.length + lossTurnNum))
 
+}
 // This funtion returns true or false if the letter typed is in the current word
 function correctLetter(letter) { 
     if (letter.length === 1 ) {
         if (randomWord.toLowerCase().includes(letter.toLowerCase())) {
             const indicesArray = grabIndices(letter);
             showLetters(indicesArray, letter)
-            console.log(`Letter '${letter}' is in the word '${randomWord}'`);
         } else {
-            console.log(`letter '${letter}' is NOT in the word '${randomWord}'`);
             wrongLetters.push(letter)
-            spaceManBoxEl.value = spaceMan.slice(0, wrongLetters.length)
-            console.log(wrongLetters)
-            for (let i = 0; i < wrongLetters.length; i++) {
-                console.log(wrongLetters[i]);
-            }
+            updateSpaceman()
         }
+        threeStrikes = 0
     } else if (letter.length === randomWord.length)  {
-    if (letter === randomWord) {
-        showLetters(randomWordArray, letter, true)
-        showMessage(messages.winMessage.text, messages.winMessage.time)
-    }
+        if (letter === randomWord) {
+            showLetters(randomWordArray, letter, true)
+            showMessage(messages.winMessage.text, messages.winMessage.time)
+            toggleSubmit(true)
+        }
+        threeStrikes = 0
     } else { 
         showMessage(messages.errorMessage.text, messages.errorMessage.time)
+        threeStrikes++
+        if (threeStrikes === 3 ) {
+            showMessage(messages.threeStrikeMessage.text, messages.threeStrikeMessage.time)
+            lossTurnNum++
+            updateSpaceman()
+            threeStrikes = 0
+        }
     }
     
-    if (wrongLetters.length === spaceMan.length) showMessage(messages.lossMessage.text, messages.lossMessage.time)
+    if ((wrongLetters.length + lossTurnNum) === spaceMan.length) { 
+        showMessage(messages.lossMessage.text, messages.lossMessage.time)
+        toggleSubmit(true)
+    }
 }
 const str = wordSelection[randomNumber]
 const found = wordSelection[randomNumber].match
@@ -177,6 +189,8 @@ function restart() {
     spaceManBoxEl.value = ''
     wrongLetterEl.innerText = ''
     getWord()
+    toggleSubmit(false)
+    guessBox.value = ''
 }
 
 let newWordArray = [];
@@ -184,31 +198,15 @@ let teamName = wordSelection[randomNumber]
 
 function initArray(ary, teamName) {
     let strLength = teamName.length;
-    console.log("The team name has " + strLength + " characters");
     for (let i = 0; i < strLength; i++) {
         ary[i] = "*";
     }
     return ary;
 }
 
-newWordArray = initArray(newWordArray, teamName);
-
-let guess;
-let team;
-let regex;
-let matches;
-
-guess = "o";
-regex = new RegExp(guess, 'gi');  // 'g' global, 'i' case insensitive
-matches = teamName.matchAll(regex);
-for (const match of matches) {
-    console.log(`Found "${match[0]}" at index ${match.index}`);
-    newWordArray[match.index] = guess;
+function toggleSubmit(disable) {
+    submitBttn.disabled = disable
 }
-
-team = newWordArray + "";  // turn the array into a string
-team = team.replaceAll(",",""); // get rid of commas
-console.log("Current guess: " + team + "\n");
 
 
 
